@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';  //这个很重要
 // let yeomanImage = require('../images/1.jpg');
 let imgDatas=require('../data/imageDatas.json');
 
+//取到每个图片的地址
 imgDatas=(function getImgURL(imgDatasArr) {
     for(var i=0,j=imgDatasArr.length;i<j;i++){
       var singleImaData=imgDatasArr[i];
@@ -55,10 +56,6 @@ class ImgFigure extends React.Component{
     }else{
       this.props.center();
     }
-
-
-
-
     e.stopPropagation();
     e.preventDefault();
   }
@@ -74,9 +71,9 @@ class ImgFigure extends React.Component{
 
     //如果图片的旋转角度有值且不为0，添加旋转角度
     if(this.props.arrange.rotate){
-      //兼容性
-      (['-moz-','-ms-','-webkit-','']).forEach(function (value) {
-        styleObj[value+'transform']='rotate('+this.props.arrange.rotate+'deg)';
+      //兼容性  要采用驼峰式写法
+      (['MozTransform','msTransform','WebkitTransform','transform']).forEach(function (value) {
+        styleObj[value]='rotate('+this.props.arrange.rotate+'deg)';
       }.bind(this));
 
     }
@@ -102,6 +99,38 @@ class ImgFigure extends React.Component{
       </figure>
     );
 
+  }
+}
+
+//创建控制组件
+class ControllerUnit extends React.Component{
+  constructor(props){
+    super(props);
+    this.handleClick=this.handleClick.bind(this);
+  }
+  handleClick(e){
+    if(this.props.arrange.isCenter){
+      this.props.inverse();
+    }else{
+      this.props.center();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  render(){
+    var controllerUnitClassName='controller-unit';
+    //如果同时对应的是居中的图片，显示控制按钮的居中态
+    if(this.props.arrange.isCenter){
+      controllerUnitClassName+=' is-center';
+      //如果同时对应的是翻转图片，显示控制按钮的翻转态
+      if(this.props.arrange.isInverse){
+        controllerUnitClassName+=' is-inverse';
+      }
+    }
+    return (
+      <span className={controllerUnitClassName} onClick={this.handleClick}></span>
+    );
   }
 }
 
@@ -167,7 +196,7 @@ class AppComponent extends React.Component {
       vPosRangeTopY=vPosRange.topY,
       vPosRangeX=vPosRange.x,
       imgsArrangeTopArr=[],
-      topImgNum=Math.ceil(Math.random()*2),
+      topImgNum=Math.floor(Math.random()*2),
       topImgSpliceIndex=0,
       imgsArrangCenterArr=imgsArrangeArr.splice(centerIndex,1);
 
@@ -287,14 +316,14 @@ class AppComponent extends React.Component {
         }
       }
       imgFigures.push(<ImgFigure data={value} key={index} ref={'imgFigure'+index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
+      //注意添加的位置
+      controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)}/>);
+
+
     }.bind(this));
 
-
     return (
-      // <div className="index">
-      //   <img src={yeomanImage} alt="Yeoman Generator" />
-      //   <div className="notice">Please edit <code>src/components/Main.js</code> to get started!</div>
-      // </div>
+
       <section className="stage" ref="stage">
         <section className="img-sec">
           {imgFigures}

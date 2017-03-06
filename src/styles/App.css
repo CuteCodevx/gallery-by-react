@@ -1,24 +1,10 @@
 /*!* Base Application Styles *!*/
-/*body {*/
-  /*color: #fff;*/
-  /*background: #222;*/
-/*}*/
+@font-face {
+  font-family: "icons-turn-arrow";
+  src:url('../fonts/icons/turn-arrow.svg') format('svg');
+  unicode-range:U+0-10FFFF;
+}
 
-/*.index img {*/
-  /*margin: 40px auto;*/
-  /*border-radius: 4px;*/
-  /*background: #fff;*/
-  /*display: block;*/
-/*}*/
-
-/*.index .notice {*/
-  /*margin: 20px auto;*/
-  /*padding: 15px 0;*/
-  /*text-align: center;*/
-  /*border: 1px solid #000;*/
-  /*border-width: 1px 0;*/
-  /*background: #666;*/
-/*}*/
 html,body{
   background-color: #222;
 }
@@ -65,7 +51,7 @@ html,body{
   /*transform: translate(320px) rotateY(180deg);*/
   transition:transform .6s ease-in-out,left .6s ease-in-out,top .6s ease-in-out;
 }
-.is-inverse{
+.img-sec .is-inverse{
   transform: translate(320px) rotateY(180deg);
 }
 
@@ -102,4 +88,35 @@ figcaption .img-back{
   z-index: 101;
   width: 100%;
   text-align: center;
+}
+.controller-unit{
+  display: inline-block;
+  width:30px;
+  height:30px;
+  margin:0 5px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #aaa;
+  border-radius: 50%;
+  transform: scale(0.5);
+  vertical-align: middle;
+
+  transition: transform .6s ease-in-out,background-color .3s ease;
+}
+.is-center{
+  background-color: #888;
+  transform: scale(1);  /*icon font*/
+
+}
+.is-center::after{
+  color:#fff;
+  font-family: 'icons-turn-arrow';
+  line-height: 30px;
+  content:'\21B7';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+.controller-nav .is-inverse{
+  background-color: #555;
+  transform: rotateY(180deg);
 }
